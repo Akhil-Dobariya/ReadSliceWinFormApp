@@ -38,7 +38,6 @@
 		private void InitializeComponent()
 		{
 			templates.Add(new TemplateModel() {TemplateId=1, TemplateName="Template1",Length=5,SpecifiedCharacter='a'});
-			templates.Add(new TemplateModel() {TemplateId=2, TemplateName="Template2",Length=15,SpecifiedCharacter='b'});
 
 			DropdownItem dropdownItem5 = new DropdownItem();
 			DropdownItem dropdownItem6 = new DropdownItem();
@@ -74,7 +73,7 @@
 			dropdownItem5.Text = "Template1";
 			dropdownItem6.Id = 2;
 			dropdownItem6.Text = "Template2";
-			comboBox1.DataSource = new DropdownItem[] { dropdownItem5, dropdownItem6 };
+			comboBox1.DataSource = new DropdownItem[] { dropdownItem5 };
 			comboBox1.DisplayMember = "Text";
 			comboBox1.FormattingEnabled = true;
 			comboBox1.Location = new Point(w+paddingleft, 0+paddingtop);

@@ -11,22 +11,10 @@ namespace WinFormsApp1
 		{
 
 		}
-		//private void SetText(object text)
-		//{
-		//	WriteTextSafe(Convert.ToString(text));
-		//}
+
+
 		private void WriteToUserBox(object text)
 		{
-			//if (textBox1.InvokeRequired)
-			//{
-			//	var d = new SafeCallDelegate(WriteTextSafe);
-			//	textBox1.Invoke(d, new object[] { text });
-			//}
-			//else
-			//{
-			//	textBox1.Text = text;
-			//}
-
 			if (richTextBox2.InvokeRequired)
 			{
 				var d = new SafeCallDelegate(WriteToUserBox);
@@ -40,15 +28,6 @@ namespace WinFormsApp1
 
 		private void WriteToTable(object text)
 		{
-			//if (textBox1.InvokeRequired)
-			//{
-			//	var d = new SafeCallDelegate(WriteTextSafe);
-			//	textBox1.Invoke(d, new object[] { text });
-			//}
-			//else
-			//{
-			//	textBox1.Text = text;
-			//}
 
 			if (richTextBox1.InvokeRequired)
 			{
@@ -63,15 +42,6 @@ namespace WinFormsApp1
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//if (threadUserboxWrite==null)
-			//{
-			//	threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
-			//}
-
-			//if (threadTableWrite == null)
-			//{
-			//	threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
-			//}
 
 			if (comboBox1.SelectedValue != null)
 			{
@@ -92,8 +62,8 @@ namespace WinFormsApp1
 
 					if (t1!=null)
 					{
-						currenttokenSource.CancelAfter(100);
-						//tokenSource.Cancel();
+						//currenttokenSource.CancelAfter(100);
+                        currenttokenSource.Cancel();
 						//tokenSource.Dispose();
 						previoustokenSource = currenttokenSource;
 						currenttokenSource=new CancellationTokenSource();
@@ -118,21 +88,12 @@ namespace WinFormsApp1
 
 								if (!String.IsNullOrWhiteSpace(line))
 								{
-									//string texttoset = textBox1.Text + line + System.Environment.NewLine;
 									string texttoset = line + System.Environment.NewLine;
-
-									//if (threadUserboxWrite==null || !threadUserboxWrite.IsAlive)
-									//{
-									//	threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
-									//}
-
 									
 									threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
 									threadUserboxWrite.Start(texttoset);
 									threadUserboxWrite.Join();
-//#pragma warning disable SYSLIB0006
-//									threadUserboxWrite.Abort();
-//#pragma warning restore SYSLIB0006
+
 									char[] textchararr = line.ToCharArray();
 									int charCount = 0;
 									bool firstChar = true;
@@ -165,61 +126,17 @@ namespace WinFormsApp1
 
 										toWrite += System.Environment.NewLine+specifiedChar + System.Environment.NewLine;
 
-										//if (threadTableWrite == null || !threadTableWrite.IsAlive)
-										//{
-										//	threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
-										//}
-
 										threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
 										threadTableWrite.Start(toWrite);
 										threadTableWrite.Join();
-//#pragma warning disable SYSLIB0006
-//										threadTableWrite.Abort();
-//#pragma warning restore SYSLIB0006
 									}
-
-									//richTextBox1.AppendText(line);
-									//richTextBox1.AppendText("\n");
-									//textBox1.Text += line + System.Environment.NewLine;
 								}
-								else
-								{
-									//break;
-								}
-								//Console.WriteLine("Line read: " + line);
-
-
-
 							}
 						}
 					}, token);
 					
 				}
 			}
-
-			
-
-			//using (var fs = new FileStream(@"D:\UpWork\test.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			//using (var reader = new StreamReader(fs))
-			//{
-			//	while (true)
-			//	{
-			//		var line = reader.ReadLine();
-
-			//		if (!String.IsNullOrWhiteSpace(line))
-			//		{
-			//			//richTextBox1.AppendText(line);
-			//			//richTextBox1.AppendText("\n");
-			//			textBox1.Text += line + System.Environment.NewLine;
-			//		}
-			//		else
-			//		{
-			//			break;
-			//		}
-			//		//Console.WriteLine("Line read: " + line);
-
-			//	}
-			//}
 		}
 
 		private void textBox2_TextChanged(object sender, EventArgs e)
