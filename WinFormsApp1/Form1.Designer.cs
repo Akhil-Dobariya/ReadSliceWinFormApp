@@ -7,9 +7,14 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 		private delegate void SafeCallDelegate(string text);
-		private Thread threadTableWrite = null;
-		private Thread threadUserboxWrite = null;
+		private static Thread threadTableWrite = null;
+		private static Thread threadUserboxWrite = null;
 		private List<TemplateModel> templates = new List<TemplateModel>();
+		Task t1 = null;
+		CancellationTokenSource currenttokenSource = new CancellationTokenSource();
+		CancellationTokenSource previoustokenSource = new CancellationTokenSource();
+		CancellationToken token = new CancellationToken();
+		bool runnext = true;
 
 		/// <summary>
 		///  Clean up any resources being used.

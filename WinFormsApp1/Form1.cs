@@ -63,6 +63,16 @@ namespace WinFormsApp1
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			//if (threadUserboxWrite==null)
+			//{
+			//	threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
+			//}
+
+			//if (threadTableWrite == null)
+			//{
+			//	threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
+			//}
+
 			if (comboBox1.SelectedValue != null)
 			{
 				var template = templates.Where(t => t.TemplateId == Convert.ToInt16(comboBox1.SelectedValue));
@@ -77,23 +87,52 @@ namespace WinFormsApp1
 				{
 					char specifiedChar = template.First().SpecifiedCharacter;
 					int length = template.First().Length;
+					richTextBox1.Clear();
+					richTextBox2.Clear();
 
-					Task.Run(() =>
+					if (t1!=null)
+					{
+						currenttokenSource.CancelAfter(100);
+						//tokenSource.Cancel();
+						//tokenSource.Dispose();
+						previoustokenSource = currenttokenSource;
+						currenttokenSource=new CancellationTokenSource();
+						//t1.Dispose();
+					}
+
+					var token = currenttokenSource.Token;
+					t1 = Task.Run(() =>
 					{
 						using (var fs = new FileStream(@"D:\UpWork\test.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 						using (var reader = new StreamReader(fs))
 						{
 							while (true)
 							{
+								if (previoustokenSource.IsCancellationRequested)
+								{
+									previoustokenSource = new CancellationTokenSource();
+									break;
+								}
+								
 								var line = reader.ReadLine();
 
 								if (!String.IsNullOrWhiteSpace(line))
 								{
 									//string texttoset = textBox1.Text + line + System.Environment.NewLine;
 									string texttoset = line + System.Environment.NewLine;
+
+									//if (threadUserboxWrite==null || !threadUserboxWrite.IsAlive)
+									//{
+									//	threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
+									//}
+
+									
 									threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToUserBox));
 									threadUserboxWrite.Start(texttoset);
-
+									threadUserboxWrite.Join();
+//#pragma warning disable SYSLIB0006
+//									threadUserboxWrite.Abort();
+//#pragma warning restore SYSLIB0006
 									char[] textchararr = line.ToCharArray();
 									int charCount = 0;
 									bool firstChar = true;
@@ -126,8 +165,17 @@ namespace WinFormsApp1
 
 										toWrite += System.Environment.NewLine+specifiedChar + System.Environment.NewLine;
 
-										threadUserboxWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
-										threadUserboxWrite.Start(toWrite);
+										//if (threadTableWrite == null || !threadTableWrite.IsAlive)
+										//{
+										//	threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
+										//}
+
+										threadTableWrite = new Thread(new ParameterizedThreadStart(WriteToTable));
+										threadTableWrite.Start(toWrite);
+										threadTableWrite.Join();
+//#pragma warning disable SYSLIB0006
+//										threadTableWrite.Abort();
+//#pragma warning restore SYSLIB0006
 									}
 
 									//richTextBox1.AppendText(line);
@@ -140,10 +188,11 @@ namespace WinFormsApp1
 								}
 								//Console.WriteLine("Line read: " + line);
 
+
+
 							}
 						}
-					});
-
+					}, token);
 					
 				}
 			}
