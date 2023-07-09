@@ -27,14 +27,14 @@ namespace WinFormsApp1
 			//	textBox1.Text = text;
 			//}
 
-			if (richTextBox1.InvokeRequired)
+			if (richTextBox2.InvokeRequired)
 			{
 				var d = new SafeCallDelegate(WriteToUserBox);
-				richTextBox1.Invoke(d, new object[] { text });
+				richTextBox2.Invoke(d, new object[] { text });
 			}
 			else
 			{
-				richTextBox1.AppendText(text.ToString());
+				richTextBox2.AppendText(text.ToString());
 			}
 		}
 
@@ -50,14 +50,14 @@ namespace WinFormsApp1
 			//	textBox1.Text = text;
 			//}
 
-			if (richTextBox2.InvokeRequired)
+			if (richTextBox1.InvokeRequired)
 			{
 				var d = new SafeCallDelegate(WriteToTable);
-				richTextBox2.Invoke(d, new object[] { text });
+				richTextBox1.Invoke(d, new object[] { text });
 			}
 			else
 			{
-				richTextBox2.AppendText(text.ToString());
+				richTextBox1.AppendText(text.ToString());
 			}
 		}
 
